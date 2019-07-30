@@ -10,28 +10,26 @@ start_time = time.time()
 
 #IO directories must be full paths
 pileup = str(sys.argv[1])
-outputDir='/store/user/snowmass/noreplica/YR_Delphes/Delphes342pre15/'
+outputDir='/store/user/jmanagan/Validation2019/'
 ## outputDir='/store/group/upgrade/delphes_output/YR_Delphes/Delphes342pre15/'  ## For CERN condor
 ## outputDir='/store/group/upgrade/delphes_output/YR_Delphes/Delphes342pre14/' ## For DESY (gfal prefix??? See line 52)
-condorDir='/uscms/home/lcadamur/nobackup/Delphes342pre15_logs/' # Change username, helps to match log directory to the ROOT file directory, adding "_logs" (for compatibility with error checker)
+condorDir='/uscms_data/d3/jmanagan/Validation2019/' # Change username, helps to match log directory to the ROOT file directory, adding "_logs" (for compatibility with error checker)
 
 cTime=datetime.datetime.now()
 
-maxEvtsPerJob = 50000 ## -1 --> do not make splitting (1 job per file)
+maxEvtsPerJob = -1 #50000 ## -1 --> do not make splitting (1 job per file)
 # maxEvtsPerJob = -1 ## -1 --> do not make splitting (1 job per file)
 
-print 'Getting proxy'
-proxyPath=os.popen('voms-proxy-info -path')
-proxyPath=proxyPath.readline().strip()
+# print 'Getting proxy'
+# proxyPath=os.popen('voms-proxy-info -path')
+# proxyPath=proxyPath.readline().strip()
 
 print 'Starting submission'
 count=0
 
 fileList = [  # CHOOSE SAMPLES, you MUST have listed the file names with listFiles.py
-    'RSGluonToTTbar_M3000_TuneCUEP8M1_14TeV_pythia8.txt',
-    'RSGluonToTTbar_M4000_TuneCUEP8M1_14TeV_pythia8.txt',
-    'ST_FCNC-TA_Tleptonic_kappa_act-Madgraph5-pythia8.txt',
-    'ST_FCNC-TA_Tleptonic_kappa_aut-Madgraph5-pythia8.txt',
+    'PhotonFlatPt8To150_200PU.txt',
+    'SinglePion0_FlatPt-8to100_200PU.txt',
     ]
 
 for sample in fileList:
@@ -48,6 +46,7 @@ for sample in fileList:
     rootlist.close()
 
     relPath = sample.replace('.txt','')
+    if '_'+pileup in relPath: relPath = relPath.replace('_'+pileup,'')
 
     os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outputDir+relPath+'_'+pileup) #For FNAL
     ## os.system('eos root://eoscms.cern.ch/ mkdir -p '+outputDir+relPath+'_'+pileup) # For running @ CERN
@@ -84,12 +83,12 @@ for sample in fileList:
             if not maxEvtsPerJob > -1:
                 outfile = relPath+'_'+str(tempcount)
 
-                dict={'RUNDIR':runDir, 'RELPATH':relPath, 'PILEUP':pileup, 'FILEIN':infile, 'FILEOUT':outfile, 'PROXY':proxyPath, 'OUTPUTDIR':outputDir}
+                dict={'RUNDIR':runDir, 'RELPATH':relPath, 'PILEUP':pileup, 'FILEIN':infile, 'FILEOUT':outfile, 'OUTPUTDIR':outputDir}
                 jdfName=condorDir+'/%(RELPATH)s_%(PILEUP)s/%(FILEOUT)s.jdl'%dict
                 # print jdfName
                 jdf=open(jdfName,'w')
                 jdf.write(
-                    """x509userproxy = %(PROXY)s
+                    """use_x509userproxy = true
 universe = vanilla
 Executable = %(RUNDIR)s/GENtoDelphes.sh
 Should_Transfer_Files = YES
@@ -97,11 +96,10 @@ WhenToTransferOutput = ON_EXIT
 Output = %(FILEOUT)s.out
 Error = %(FILEOUT)s.err
 Log = %(FILEOUT)s.log
-Requirements = (TARGET.TotalCpus == 8)
 Notification = Never
 Arguments = %(FILEIN)s %(OUTPUTDIR)s/%(RELPATH)s_%(PILEUP)s %(FILEOUT)s.root %(PILEUP)s
 
-Queue 1"""%dict)
+Queue 1"""%dict)  ##Requirements = (TARGET.TotalCpus == 8)
             else:
                 outfile = relPath+'_'+str(tempcount)+'_'+str(i_split)
                 maxEvents = int(maxEvtsPerJob)
@@ -109,11 +107,11 @@ Queue 1"""%dict)
                 if i_split == n_jobs-1:
                    maxEvents = nevents - maxEvtsPerJob*(n_jobs-1) ## up to the last event
 
-                dict={'RUNDIR':runDir, 'RELPATH':relPath, 'PILEUP':pileup, 'FILEIN':infile, 'FILEOUT':outfile, 'PROXY':proxyPath, 'OUTPUTDIR':outputDir, 'SKIPEVENTS':str(skipEvents), 'MAXEVENTS':str(maxEvents), 'ISPLIT':str(i_split)}
+                dict={'RUNDIR':runDir, 'RELPATH':relPath, 'PILEUP':pileup, 'FILEIN':infile, 'FILEOUT':outfile, 'OUTPUTDIR':outputDir, 'SKIPEVENTS':str(skipEvents), 'MAXEVENTS':str(maxEvents), 'ISPLIT':str(i_split)}
                 jdfName=condorDir+'/%(RELPATH)s_%(PILEUP)s/%(FILEOUT)s.jdl'%dict ## note: i_split is contained in FILEOUT
                 jdf=open(jdfName,'w')
                 jdf.write(
-                    """x509userproxy = %(PROXY)s
+                    """use_x509userproxy = true
 universe = vanilla
 Executable = %(RUNDIR)s/GENtoDelphes.sh
 Should_Transfer_Files = YES
@@ -121,11 +119,10 @@ WhenToTransferOutput = ON_EXIT
 Output = %(FILEOUT)s.out
 Error = %(FILEOUT)s.err
 Log = %(FILEOUT)s.log
-Requirements = (TARGET.TotalCpus == 8)
 Notification = Never
 Arguments = %(FILEIN)s %(OUTPUTDIR)s/%(RELPATH)s_%(PILEUP)s %(FILEOUT)s.root %(PILEUP)s %(SKIPEVENTS)s %(MAXEVENTS)s
 
-Queue 1"""%dict)
+Queue 1"""%dict) ## Requirements = (TARGET.TotalCpus == 8)
 
             jdf.close()
             os.chdir('%s/%s_%s'%(condorDir,relPath,pileup))

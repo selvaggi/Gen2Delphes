@@ -30,30 +30,30 @@ if [[ $# -eq 4 ]] ; then
 fi
 
 # Set variables
-detCard=CMS_PhaseII_${PILEUP}_v03_splitter.tcl
+detCard=CMS_PhaseII_${PILEUP}_v04VAL.tcl
 energy=14
-DelphesVersion=tags/3.4.2pre15
+DelphesVersion=tags/3.4.2pre17
 nPU=`echo $detCard | cut -d '_' -f 2 | cut -d '.' -f 1`
 process=`echo $FILEIN | cut -d '_' -f 1-2`
 configuration=`echo $detCard | cut -d '_' -f 1-2`
 DelphesOutput=CMSP2_${nPU}_`echo $FILEIN`.root
 
 # make the CMSSW release, compile, and copy
-scram project CMSSW_9_1_0_pre3
-cd CMSSW_9_1_0_pre3/src
+scram project CMSSW_10_0_5
+cd CMSSW_10_0_5/src
 eval `scram runtime -sh`
 cd -
 
 echo "xrdcp source tarball and pileup file"
-xrdcp -f root://cmseos.fnal.gov//store/user/snowmass/DelphesSubmissionLPCcondor/Delphes342pre15.tar . #CHECK ME!
+xrdcp -f root://cmseos.fnal.gov//store/user/snowmass/DelphesSubmissionLPCcondor/Delphes342pre17.tar . #CHECK ME!
 XRDEXIT=$?
 if [[ $XRDEXIT -ne 0 ]]; then
     echo "exit code $XRDEXIT, failure in xrdcp of Delphes.tar"
     exit $XRDEXIT
 fi
 
-tar -xf Delphes342pre15.tar
-rm -f Delphes342pre15.tar 
+tar -xf Delphes342pre17.tar
+rm -f Delphes342pre17.tar 
 cd delphes
 # Delphes is already compiled in the tarball
 
