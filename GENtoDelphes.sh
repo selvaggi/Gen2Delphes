@@ -5,7 +5,7 @@
 #Adapted by Julie Hogan - summer 2016, jmhogan@fnal.gov
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-export SCRAM_ARCH=slc6_amd64_gcc530
+export SCRAM_ARCH=slc6_amd64_gcc700
 
 startTime=`date +%s`
 
@@ -30,9 +30,9 @@ if [[ $# -eq 4 ]] ; then
 fi
 
 # Set variables
-detCard=CMS_PhaseII_${PILEUP}_v04VAL.tcl
+detCard=CMS_PhaseII_${PILEUP}_v05VAL.tcl
 energy=14
-DelphesVersion=tags/3.4.2pre17
+DelphesVersion=tags/3.4.3pre01
 nPU=`echo $detCard | cut -d '_' -f 2 | cut -d '.' -f 1`
 process=`echo $FILEIN | cut -d '_' -f 1-2`
 configuration=`echo $detCard | cut -d '_' -f 1-2`
@@ -45,15 +45,15 @@ eval `scram runtime -sh`
 cd -
 
 echo "xrdcp source tarball and pileup file"
-xrdcp -f root://cmseos.fnal.gov//store/user/snowmass/DelphesSubmissionLPCcondor/Delphes342pre17.tar . #CHECK ME!
+xrdcp -f root://cmseos.fnal.gov//store/user/snowmass/DelphesSubmissionLPCcondor/Delphes343pre01_v05VAL.tar tarball.tar #CHECK ME!
 XRDEXIT=$?
 if [[ $XRDEXIT -ne 0 ]]; then
     echo "exit code $XRDEXIT, failure in xrdcp of Delphes.tar"
     exit $XRDEXIT
 fi
 
-tar -xf Delphes342pre17.tar
-rm -f Delphes342pre17.tar 
+tar -xf tarball.tar
+rm -f tarball.tar 
 cd delphes
 # Delphes is already compiled in the tarball
 
@@ -121,9 +121,9 @@ echo
 # copy output to eos
 # Running @CERN this should be fine with the root://eoscms.cern.ch eosOutDir
 # Running @DESY likely need to change this copy command!
-echo "xrdcp -f ${FILEOUT} root://cmseos.fnal.gov/${OUTPUT}/${FILEOUT}"
-xrdcp -f ${FILEOUT} root://cmseos.fnal.gov/${OUTPUT}/${FILEOUT} 2>&1
-#xrdcp -f ${FILEOUT} root://eoscms.cern.ch/${OUTPUT}/${FILEOUT} 2>&1
+echo "xrdcp -f ${FILEOUT} root://eoscms.cern.ch/${OUTPUT}/${FILEOUT}"
+#xrdcp -f ${FILEOUT} root://cmseos.fnal.gov/${OUTPUT}/${FILEOUT} 2>&1
+xrdcp -f ${FILEOUT} root://eoscms.cern.ch/${OUTPUT}/${FILEOUT} 2>&1
 #gfal-cp ${FILEOUT} srm://dcache-se-cms.desy.de/pnfs/desy.de/cms/tier2/${OUTPUT}/${FILEOUT} 2>&1 ## Maybe??
 XRDEXIT=$?
 if [[ $XRDEXIT -ne 0 ]]; then
