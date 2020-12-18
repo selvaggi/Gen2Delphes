@@ -7,32 +7,54 @@ os.system('xrdcp -f root://cmseos.fnal.gov//store/user/snowmass/DelphesSubmissio
 execfile(runDir+'/EOSSafeUtils.py')
 
 start_time = time.time()
+pileup = str(sys.argv[1])
 
 #IO directories must be full paths
-pileup = str(sys.argv[1])
-outputDir='/store/user/jmanagan/Validation2019/'
-## outputDir='/store/group/upgrade/delphes_output/YR_Delphes/Delphes342pre15/'  ## For CERN condor
+outputDir='/store/group/upgrade/RTB/Delphes343pre07/v07VALclosure/'  ## For CERN condor
 ## outputDir='/store/group/upgrade/delphes_output/YR_Delphes/Delphes342pre14/' ## For DESY (gfal prefix??? See line 52)
-condorDir='/uscms_data/d3/jmanagan/Validation2019/' # Change username, helps to match log directory to the ROOT file directory, adding "_logs" (for compatibility with error checker)
 
-cTime=datetime.datetime.now()
+condorDir='/uscms_data/d3/jmanagan/Validation2019/delphes343pre01/' # Change username, helps to match log directory to the ROOT file directory, adding "_logs" (for compatibility with error checker)
 
-maxEvtsPerJob = -1 #50000 ## -1 --> do not make splitting (1 job per file)
-# maxEvtsPerJob = -1 ## -1 --> do not make splitting (1 job per file)
+maxEvtsPerJob = -1 #50000 for production ## -1 --> do not make splitting (1 job per file)
 
 # print 'Getting proxy'
 # proxyPath=os.popen('voms-proxy-info -path')
 # proxyPath=proxyPath.readline().strip()
 
 print 'Starting submission'
+cTime=datetime.datetime.now()
 count=0
 
 fileList = [  # CHOOSE SAMPLES, you MUST have listed the file names with listFiles.py
-    'PhotonFlatPt8To150_200PU.txt',
-    'SinglePion0_FlatPt-8to100_200PU.txt',
+    #'DYToLL_M-50_TuneCP5_14TeV-pythia8_0PU.txt',
+    #'SingleElectron_PT200to500_0PU.txt',
+    #'SingleElectron_PT2to200_0PU.txt',
+    #'SinglePhoton_PT200to500_0PU.txt',
+    #'SinglePhoton_PT2to200_0PU.txt',
+
+    #'TT_TuneCP5_14TeV-powheg-pythia8_200PU.txt',
+    #'GluGluHToTauTau_M125_14TeV_powheg_pythia8_TuneCP5_200PU.txt',
+    #'GluGluHToGG_M125_14TeV_powheg_pythia8_TuneCP5_200PU.txt',
+    #'GluGluToHHTo2B2Tau_node_SM_TuneCP5_14TeV-madgraph-pythia8_200PU.txt',
+    'GluGluToHHTo2B2G_node_SM_TuneCP5_14TeV-madgraph_pythia8_200PU.txt',
+    'QCD_Pt-15to3000_TuneCP5_Flat_14TeV-pythia8_200PU.txt',
+    #'QCD_Pt-15to3000_MuEnrichedPt5_TuneCP5_14TeV_pythia8_200PU.txt',
+    #'QCD_Pt-15to3000_EMEnriched_TuneCP5_14TeV_pythia8_200PU.txt',
+    'DYToLL_M-50_TuneCP5_14TeV-pythia8_200PU.txt',
+
+    #'GluGluToHHTo2B2G_node_SM_TuneCP5_14TeV-madgraph_pythia8_200PU.txt',
+    #'QCD_Pt-15to3000_TuneCP5_Flat_14TeV-pythia8_200PU.txt',
+    #'SingleElectron_PT200to500_200PU.txt',
+    #'SingleElectron_PT2to200_200PU.txt',
+    #'SinglePhoton_PT200to500_200PU.txt',
+    #'SinglePhoton_PT2to200_200PU.txt',
+    #'PhotonFlatPt8To150_0PU.txt',
+    #'SinglePion0_FlatPt-8to100_200PU.txt',
+    #'GluGluHToGG_M125_14TeV_amcatnloFXFX_pythia8_0PU.txt',
     ]
 
 for sample in fileList:
+    if '_'+pileup not in sample: continue
 
     rootlist = open('fileLists/'+sample)
     rootfiles = []
@@ -48,8 +70,8 @@ for sample in fileList:
     relPath = sample.replace('.txt','')
     if '_'+pileup in relPath: relPath = relPath.replace('_'+pileup,'')
 
-    os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outputDir+relPath+'_'+pileup) #For FNAL
-    ## os.system('eos root://eoscms.cern.ch/ mkdir -p '+outputDir+relPath+'_'+pileup) # For running @ CERN
+    ## os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outputDir+relPath+'_'+pileup) #For FNAL
+    os.system('eos root://eoscms.cern.ch/ mkdir -p '+outputDir+relPath+'_'+pileup) # For running @ CERN
     ## os.system('gfal-mkdir -p srm://dcache-se-cms.desy.de/pnfs/desy.de/cms/tier2'+outputDir+relPath+'_'+pileup) ## DESY???
     os.system('mkdir -p '+condorDir+relPath+'_'+pileup)
 
@@ -58,7 +80,7 @@ for sample in fileList:
         infile = file
 
         tempcount+=1
-        # if tempcount > 1: continue   # OPTIONAL to submit a test job
+        #if tempcount == 1: continue   # OPTIONAL to submit a test job
 
         fname_bare = rootfiles_bare[ifile]
         n_jobs = 1
@@ -132,4 +154,6 @@ Queue 1"""%dict) ## Requirements = (TARGET.TotalCpus == 8)
             print str(count), "jobs submitted!!!"
 
 print("--- %s minutes ---" % (round(time.time() - start_time, 2)/60))
+
+
 
