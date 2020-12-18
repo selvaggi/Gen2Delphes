@@ -2,53 +2,36 @@ import os,sys
 
 samplelist = [
 
-    # '/WpWpJJ_QCD_TuneCP5_14TeV-madgraph-pythia8/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/WpWpJJ_EWK_TuneCP5_14TeV-madgraph-pythia8/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/WZTo3LNu_TuneCP5_14TeV-amcatnloFXFX-pythia8/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/WToLNu_14TeV_TuneCP5_pythia8/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/WToLNu_14TeV_TuneCP5_pythia8/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/VBF_HToInvisible_M125_14TeV_powheg_pythia8/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/VBFHToBB_M-125_14TeV_powheg_pythia8_weightfix/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/VBFHToBB_M-125_14TeV_powheg_pythia8_weightfix/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/TTbar_14TeV_TuneCP5_pilot_PhaseIITDRSpring19/PhaseIITDRSpring19MiniAOD-PU200_pilot_106X_upgrade2023_realistic_v3_ext1-v3/MINIAODSIM',
-    # '/TTbar_14TeV_TuneCP5_pilot_PhaseIITDRSpring19/PhaseIITDRSpring19MiniAOD-NoPU_pilot_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/TTbar_14TeV_TuneCP5_Pythia8/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3_ext1-v3/MINIAODSIM',
-    # '/TTbar_14TeV_TuneCP5_Pythia8/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/TTTo2L2Nu_TuneCP5_14TeV-powheg-pythia8/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/SinglePion_PT2to100/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/SinglePion_PT2to100/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    '/SinglePion0_FlatPt-8to100/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    '/SinglePion0_FlatPt-8to100/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/SingleElectron_PT2to100/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/SingleElectron_PT2to100/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/QCD_Pt_0_1000_14TeV_TuneCUETP8M1/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/QCD_Pt_0_1000_14TeV_TuneCUETP8M1/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    '/PhotonFlatPt8To150/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    '/PhotonFlatPt8To150/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/Nu_E10-pythia8-gun/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v3/MINIAODSIM',
-    # '/Muplus_Pt500-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/Muplus_Pt1000-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/Muplus_Pt100-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/Muminus_Pt500-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/Muminus_Pt50-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/Muminus_Pt1000-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/Muminus_Pt100-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/Mu_FlatPt2to100-pythia8-gun/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/Mu_FlatPt2to100-pythia8-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/JPsiToMuMu_Pt0to100-pythia8-gun/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/JPsiToMuMu_Pt0to100-pythia8-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/HSCPppstau_M_871_TuneCUETP8M1_14TeV_pythia8/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    '/GluGluHToGG_M125_14TeV_amcatnloFXFX_pythia8/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/DoubleElectron_FlatPt-1To100/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v2/MINIAODSIM',
-    # '/DisplacedMuons_Pt30to100_Dxy0to3000-pythia8-gun/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/DisplacedMuons_Pt30to100_Dxy0to3000-pythia8-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/DisplacedMuons_Pt2to10_Dxy0to3000-pythia8-gun/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/DisplacedMuons_Pt2to10_Dxy0to3000-pythia8-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/DisplacedMuons_Pt10to30_Dxy0to3000-pythia8-gun/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/DisplacedMuons_Pt10to30_Dxy0to3000-pythia8-gun/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/DYToMuMuorEleEle_M-20_14TeV_pythia8/PhaseIITDRSpring19MiniAOD-PU200_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/DYToMuMuorEleEle_M-20_14TeV_pythia8/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
-    # '/BsToPhiPhi_4K_TuneCP5_14TeV-pythia8/PhaseIITDRSpring19MiniAOD-NoPU_106X_upgrade2023_realistic_v3-v1/MINIAODSIM',
+    # samples we've been using
+    '/TT_TuneCP5_14TeV-powheg-pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v2/FEVT',
+    '/DYToLL_M-50_TuneCP5_14TeV-pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_pilot_111X_mcRun4_realistic_T15_v1-v1/FEVT',
+    '/GluGluHToTauTau_M125_14TeV_powheg_pythia8_TuneCP5/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/GluGluToHHTo2B2Tau_node_SM_TuneCP5_14TeV-madgraph-pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1_ext1-v3/FEVT',
+    '/GluGluToHHTo2B2G_node_SM_TuneCP5_14TeV-madgraph_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/FEVT',
+    '/QCD_Pt-15to3000_TuneCP5_Flat_14TeV-pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_castor_111X_mcRun4_realistic_T15_v1-v1/FEVT',
+
+    # more leptons and taus, hopefully in barrel+endcap
+    '/DoublePhoton_FlatPt-1To100/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1_ext1-v2/FEVT',
+    '/DoublePhoton_FlatPt-1To100/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1_ext2-v3/FEVT',
+    '/DoubleElectron_FlatPt-1To100/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v2/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/DoubleMuon_gun_FlatPt-1To100/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/FEVT',
+    '/MultiTau_PT15to500/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1_ext1-v2/FEVT',
+    '/MultiTau_PT15to500/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1_ext2-v3/FEVT',
+    
+    # more QCD, although not flat in these pT ranges
+    '/QCD_Pt_20to30_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_withNewMB_111X_mcRun4_realistic_T15_v1-v2/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/QCD_Pt_30to50_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/QCD_Pt_30to50_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_withNewMB_111X_mcRun4_realistic_T15_v1_ext1-v2/GEN-SIM-DIGI-RAW-MINIAOD', # do we want "withNewMB" over the other?
+    '/QCD_Pt_50to80_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/QCD_Pt_50to80_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_withNewMB_111X_mcRun4_realistic_T15_v1_ext1-v3/GEN-SIM-DIGI-RAW-MINIAOD', # same here
+    '/QCD_Pt_80to120_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/QCD_Pt_120to170_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/QCD_Pt_170to300_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/QCD_Pt_300to470_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/QCD_Pt_470to600_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+    '/QCD_Pt_600oInf_TuneCP5_14TeV_pythia8/Phase2HLTTDRSummer20ReRECOMiniAOD-PU200_111X_mcRun4_realistic_T15_v1-v1/GEN-SIM-DIGI-RAW-MINIAOD',
+
+
 ]
    
 if not os.path.exists(os.getcwd()+'/fileLists'): os.system('mkdir fileLists')
@@ -59,7 +42,7 @@ for sample in samplelist:
 
     # print file list to a .txt                                                                              
     if 'PU200' in sample:
-        if '_ext' not in sample:
+        if '_ext' not in sample and '_pilot2' not in sample:
             os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = '+sample+'" > fileLists/'+sample.split('/')[1]+'_200PU.txt')
         else:
             os.system('/cvmfs/cms.cern.ch/common/dasgoclient --limit=0 --query="file dataset = '+sample+'" >> fileLists/'+sample.split('/')[1]+'_200PU.txt')
