@@ -1,36 +1,71 @@
-# DelphesSMbackgrounds
+# RTB Gen2Delphes
 
-These scripts facilitate submitting HTCondor jobs that process a defined set of LHE or GEN input files through Delphes tag 3.4.2pre05 on the FNAL LPC cluster. Changes to the input file name structure, Delphes tag, or cluster will require edits.
+These scripts facilitate submitting HTCondor jobs that process a defined set of LHE or GEN input files through Delphes.
 
-To create a new Delphes area: https://twiki.cern.ch/twiki/bin/view/CMS/DelphesUPG
-If running on LHE: compile DelphesPythia8 and copy configLHE_jetmatchning.cmnd into the delphes directory before creating a tarball.
+Current CMSSW = CMSSW_10_0_5
+Current Delphes tag = 3.4.3pre07
+Current Delphes card = CMS_Phase2_200PU_v07VAL.tcl
 
-LHE-input scripts: submitCondor.py, LHEtoDelphes.sh
+## To change the CMSSW or Delphes settings
 
-GEN-input scripts: submitCondor_gen.py, GENtoDelphes.sh
+First, prepare a delphes tarball that has your desired changes to the code and/or the card:
+ * Cards should be placed in the CMS_Phase2/ folder
+ * Optimally, name the card: CMS_Phase2_200PU_SomeNewLabelHere.tcl
+ * **In the card, choose the MinBias_100k line, NOT the /eos/ path!**
 
-CHECK ALL YOUR SCRIPTS BEFORE RUNNING, MAKE NO ASSUMPTIONS!
+Tar your delphes area like this, updating the name of the tarball. This tarball should be put in the DelphesSubmissionLPCcondor area in FNAL eos.
+```
+tar -zcf Delphes343pre07.tar delphes/
+xrdcp Delphes343pre07.tar root://cmseos.fnal.gov//store/user/snowmass/DelphesSubmissionLPCcondor/Delphes343pre07.tar
+```
 
-----------------------------------------------------------
+Edit `GENtoDelphes.sh` to reflect these changes. In particular:
+ * Line 8: architecture, if needed.
+ * Line 33: delphes card name
+ * Line 35: delphes tag (for metadata only)
+ * Lines 42-43: CMSSW version
+ * Line 48: delphes tarball name
 
-To SUBMIT condor jobs at the LPC:
+## To submit condor jobs at the FNAL LPC:
 
-voms-proxy-init -voms cms
-python -u submitCondor_gen.py <0,200>PU >& submit.log &
+Currently all ROOT files are directed to CERN's /eos/ system! Check GENtoDelphes.sh to change that if desired.
 
-*In this file, set output directories and choose samples*
+```
+cd ~/nobackup
+mkdir DelphesProduction
+cd DelphesProduction
+git clone https://github.com/recotoolsbenchmarks/Gen2Delphes.git 
+cd Gen2Delphes
 
----------------------------------------------------------
+voms-proxy-init -voms cms -valid 168:00
+python -u listFiles.py ## after editing it to select/add your samples!
 
-EXECUTABLE: LHEtoDelphes.sh, GENtoDelphes.sh
+vi/emacs/nano submitCondor_gen.py ## Edit blocks at line 11 (paths) and sample list at line 30
+python -u submitCondor_gen.py 200PU >& submit.log &
 
-Check CMSSW releases and locations of tarball and minBias file, they are not arguments.
-Can control card, number of events, etc, from here.
-This script does xrdcp from EOS, runs Pythia, and runs Delphes. 
+tail -f submit.log ## watch and see
+```
 
-*NOTE: check which minBias file your delphes card is set to use!! Re-tar after any card edits.*
+## To submit condor jobs on lxplus HTCondor:
 
----------------------------------------------------------
+```
+mkdir DelphesProduction
+cd DelphesProduction
+git clone https://github.com/recotoolsbenchmarks/Gen2Delphes.git 
+cd Gen2Delphes
+
+source environment.(c)sh
+voms-proxy-init -voms cms -valid 168:00
+python -u listFiles.py ## after editing it to select/add your samples!
+
+vi/emacs/nano submitCondor_genCERN.py ## Edit blocks at line 11 (paths) and sample list at line 30
+python -u submitCondor_genCERN.py 200PU >& submit.log &
+
+tail -f submit.log ## watch and see
+```
+
+
+## Checking for errors (not checked since 2018!)
 
 To check output of jobs, edit CheckErrorsDelphesGEN.py (check ROOT file directory path & month for zero size test)
 
@@ -52,11 +87,10 @@ This will check for four types of failures (give as resub_num argument)
 
 Logs can be deleted after jobs are successful.
 
---------------------------------------------------------
+
+## Post-processing options (not checked since 2018!)
 
 Post-processing scripts are available to hadd and xrdcp files
-
-*CAUTION, as of May 2018 there is trouble copying to CERN, check with Julie for updates*
 
 python -u haddOnCondor.py <0,200>PU
 
