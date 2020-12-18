@@ -2,16 +2,16 @@
 
 These scripts facilitate submitting HTCondor jobs that process a defined set of LHE or GEN input files through Delphes.
 
-Current CMSSW = CMSSW_10_0_5
-Current Delphes tag = 3.4.3pre07
-Current Delphes card = CMS_Phase2_200PU_v07VAL.tcl
+ * Current CMSSW = CMSSW_10_0_5
+ * Current Delphes tag = 3.4.3pre07
+ * Current Delphes card = CMS_Phase2_200PU_v07VAL.tcl
 
 ## To change the CMSSW or Delphes settings
 
 First, prepare a delphes tarball that has your desired changes to the code and/or the card:
  * Cards should be placed in the CMS_Phase2/ folder
  * Optimally, name the card: CMS_Phase2_200PU_SomeNewLabelHere.tcl
- * **In the card, choose the MinBias_100k line, NOT the /eos/ path!**
+ * **In the PileupMerger section, choose the MinBias_100k line, NOT the /eos/ path!**
 
 Tar your delphes area like this, updating the name of the tarball. This tarball should be put in the DelphesSubmissionLPCcondor area in FNAL eos.
 ```
@@ -40,7 +40,7 @@ cd Gen2Delphes
 voms-proxy-init -voms cms -valid 168:00
 python -u listFiles.py ## after editing it to select/add your samples!
 
-vi/emacs/nano submitCondor_gen.py ## Edit blocks at line 11 (paths) and sample list at line 30
+vi/emacs/nano submitCondor_gen.py ## Edit blocks at line 12 (paths) and sample list at line 27
 python -u submitCondor_gen.py 200PU >& submit.log &
 
 tail -f submit.log ## watch and see
@@ -58,7 +58,7 @@ source environment.(c)sh
 voms-proxy-init -voms cms -valid 168:00
 python -u listFiles.py ## after editing it to select/add your samples!
 
-vi/emacs/nano submitCondor_genCERN.py ## Edit blocks at line 11 (paths) and sample list at line 30
+vi/emacs/nano submitCondor_genCERN.py ## Edit blocks at line 12 (paths) and sample list at line 32
 python -u submitCondor_genCERN.py 200PU >& submit.log &
 
 tail -f submit.log ## watch and see

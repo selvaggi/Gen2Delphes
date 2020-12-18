@@ -11,7 +11,6 @@ pileup = str(sys.argv[1])
 
 #IO directories must be full paths
 outputDir='/store/group/upgrade/RTB/Delphes343pre07/v07VALclosure/'  ## For CERN condor
-## outputDir='/store/group/upgrade/delphes_output/YR_Delphes/Delphes342pre14/' ## For DESY (gfal prefix??? See line 52)
 
 condorDir='/uscms_data/d3/jmanagan/Validation2019/delphes343pre01/' # Change username, helps to match log directory to the ROOT file directory, adding "_logs" (for compatibility with error checker)
 

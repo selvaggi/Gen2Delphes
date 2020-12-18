@@ -11,7 +11,6 @@ pileup = str(sys.argv[1])
 
 #IO directories must be full paths
 outputDir='/store/group/upgrade/RTB/Delphes343pre07/v07VALclosure/'  ## For CERN condor
-## outputDir='/store/group/upgrade/delphes_output/YR_Delphes/Delphes342pre14/' ## For DESY (gfal prefix??? See line 52)
 
 condorDir='/uscms_data/d3/jmanagan/Validation2019/delphes343pre01/' # Change username, helps to match log directory to the ROOT file directory, adding "_logs" (for compatibility with error checker)
 
@@ -26,31 +25,13 @@ cTime=datetime.datetime.now()
 count=0
 
 fileList = [  # CHOOSE SAMPLES, you MUST have listed the file names with listFiles.py
-    #'DYToLL_M-50_TuneCP5_14TeV-pythia8_0PU.txt',
-    #'SingleElectron_PT200to500_0PU.txt',
-    #'SingleElectron_PT2to200_0PU.txt',
-    #'SinglePhoton_PT200to500_0PU.txt',
-    #'SinglePhoton_PT2to200_0PU.txt',
 
     #'TT_TuneCP5_14TeV-powheg-pythia8_200PU.txt',
     #'GluGluHToTauTau_M125_14TeV_powheg_pythia8_TuneCP5_200PU.txt',
-    #'GluGluHToGG_M125_14TeV_powheg_pythia8_TuneCP5_200PU.txt',
-    #'GluGluToHHTo2B2Tau_node_SM_TuneCP5_14TeV-madgraph-pythia8_200PU.txt',
     'GluGluToHHTo2B2G_node_SM_TuneCP5_14TeV-madgraph_pythia8_200PU.txt',
     'QCD_Pt-15to3000_TuneCP5_Flat_14TeV-pythia8_200PU.txt',
-    #'QCD_Pt-15to3000_MuEnrichedPt5_TuneCP5_14TeV_pythia8_200PU.txt',
-    #'QCD_Pt-15to3000_EMEnriched_TuneCP5_14TeV_pythia8_200PU.txt',
     'DYToLL_M-50_TuneCP5_14TeV-pythia8_200PU.txt',
 
-    #'GluGluToHHTo2B2G_node_SM_TuneCP5_14TeV-madgraph_pythia8_200PU.txt',
-    #'QCD_Pt-15to3000_TuneCP5_Flat_14TeV-pythia8_200PU.txt',
-    #'SingleElectron_PT200to500_200PU.txt',
-    #'SingleElectron_PT2to200_200PU.txt',
-    #'SinglePhoton_PT200to500_200PU.txt',
-    #'SinglePhoton_PT2to200_200PU.txt',
-    #'PhotonFlatPt8To150_0PU.txt',
-    #'SinglePion0_FlatPt-8to100_200PU.txt',
-    #'GluGluHToGG_M125_14TeV_amcatnloFXFX_pythia8_0PU.txt',
     ]
 
 for sample in fileList:
@@ -70,8 +51,8 @@ for sample in fileList:
     relPath = sample.replace('.txt','')
     if '_'+pileup in relPath: relPath = relPath.replace('_'+pileup,'')
 
-    ## os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outputDir+relPath+'_'+pileup) #For FNAL
     os.system('eos root://eoscms.cern.ch/ mkdir -p '+outputDir+relPath+'_'+pileup) # For running @ CERN
+    ## os.system('eos root://cmseos.fnal.gov/ mkdir -p '+outputDir+relPath+'_'+pileup) #For FNAL
     ## os.system('gfal-mkdir -p srm://dcache-se-cms.desy.de/pnfs/desy.de/cms/tier2'+outputDir+relPath+'_'+pileup) ## DESY???
     os.system('mkdir -p '+condorDir+relPath+'_'+pileup)
 
