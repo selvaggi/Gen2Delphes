@@ -30,7 +30,8 @@ if [[ $# -eq 4 ]] ; then
 fi
 
 # Set variables
-detCard=CMS_PhaseII_${PILEUP}_v07VAL.tcl ## CARD GOES HERE SET ME!!!
+#detCard=CMS_PhaseII_${PILEUP}_v07VAL.tcl ## CARD GOES HERE SET ME!!!
+detCard=dummy.tcl ## CARD GOES HERE SET ME!!!
 energy=14
 DelphesVersion=tags/3.4.3pre07
 nPU=`echo $detCard | cut -d '_' -f 2 | cut -d '.' -f 1`
@@ -45,7 +46,8 @@ eval `scram runtime -sh`
 cd -
 
 echo "xrdcp source tarball and pileup file"
-xrdcp -f root://cmseos.fnal.gov//store/user/snowmass/DelphesSubmissionLPCcondor/Delphes343pre07_v07VAL.tar tarball.tar #TAR GOES HERE CHECK ME!
+#xrdcp -f root://cmseos.fnal.gov//store/user/snowmass/DelphesSubmissionLPCcondor/Delphes343pre07_v07VAL.tar tarball.tar #TAR GOES HERE CHECK ME!
+xrdcp -f root://eoscms.cern.ch//store/group/upgrade/RTB/delphes_tarballs/Delphes343pre07_v08.tar tarball.tar
 XRDEXIT=$?
 if [[ $XRDEXIT -ne 0 ]]; then
     echo "exit code $XRDEXIT, failure in xrdcp of Delphes.tar"
@@ -68,6 +70,9 @@ setupTime=`date +%s`
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #run MiniAOD through Delphes
+
+
+echo "cards/CMS_PhaseII/$detCard"
 
 ## THESE AREN'T ACTUALLY DOING ANYTHING RIGHT NOW IN THE CARD
 sed -i "s|MAXEVENTS|${MAXEVT}|g" cards/CMS_PhaseII/$detCard
