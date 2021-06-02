@@ -10,9 +10,9 @@ execfile(runDir+'/EOSSafeUtils.py')
 
 start_time = time.time()
 pileup = str(sys.argv[1])
-
+outdir=str(sys.argv[2])
 #IO directories must be full paths
-outputDir='/store/group/upgrade/RTB/Delphes343pre07/v08/'  ## For CERN condor
+outputDir='/store/group/upgrade/RTB/{}'.format(outdir)  ## For CERN condor
 
 #condorDir='/uscms_data/d3/jmanagan/Validation2019/delphes343pre01/' # Change username, helps to match log directory to the ROOT file directory, adding "_logs" (for compatibility with error checker)
 condorDir='condor' # Change username, helps to match log directory to the ROOT file directory, adding "_logs" (for compatibility with error checker)
@@ -32,15 +32,16 @@ print 'Starting submission'
 cTime=datetime.datetime.now()
 count=0
 
-print fileList
+#print fileList
 
 
 for sample in fileList:
-    if '_'+pileup not in sample: continue
+    #if '_'+pileup not in sample: continue
     with open(os.path.abspath(sample),'r') as rootlist:
         rootfiles = []
         rootfiles_bare = []
         for line in rootlist:
+	    #print line 
             rootfiles.append('root://xrootd-cms.infn.it/'+line.strip())
             rootfiles_bare.append(line.strip())
  
@@ -78,7 +79,7 @@ for sample in fileList:
 use_x509userproxy = true
 x509userproxy = {}
 universe = vanilla
-+JobFlavour = tomorrow
++JobFlavour = "tomorrow"
 +AccountingGroup = "group_u_CMST3.all"
 Executable = {}/GENtoDelphes.sh
 Should_Transfer_Files = YES
@@ -94,10 +95,11 @@ Notification = Never
 
 
     tempcount = 0;
+    print rootfiles
     for ifile, file in enumerate(rootfiles):
         infile = file
 
-        #print infile
+        print infile
         tempcount+=1
         #if tempcount == 1: continue   # OPTIONAL to submit a test job
 
